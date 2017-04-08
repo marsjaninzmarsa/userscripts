@@ -3,7 +3,7 @@
 // @namespace    http://niewiarowski.it/
 // @version      0.1.1
 // @author       marsjaninzmarsa
-// @description  Delivers shiny emoji reactions to issues and pull requests riht to listings!
+// @description  Delivers shiny emoji reactions to issues and pull requests right to listings!
 // @copyright    2017+, Kuba Niewiarowski (niewiarowski.it)
 // @license      GPL3+, https://github.com/marsjaninzmarsa/userscripts/blob/master/LICENSE
 // @updateURL    https://openuserjs.org/meta/marsjaninzmarsa/GitHub_Reactions_on_lists.meta.js
