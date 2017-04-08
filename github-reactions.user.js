@@ -1,9 +1,15 @@
 // ==UserScript==
 // @name         GitHub Reactions on lists
 // @namespace    http://niewiarowski.it/
-// @version      0.1
-// @description  try to take over the world!
+// @version      0.1.1
 // @author       marsjaninzmarsa
+// @description  Delivers shiny emoji reactions to issues and pull requests riht to listings!
+// @copyright    2017+, Kuba Niewiarowski (niewiarowski.it)
+// @license      GPL3+, https://github.com/marsjaninzmarsa/userscripts/blob/master/LICENSE
+// @updateURL    https://openuserjs.org/meta/marsjaninzmarsa/GitHub_Reactions_on_lists.meta.js
+// @downloadURL  https://openuserjs.org/src/scripts/marsjaninzmarsa/GitHub_Reactions_on_lists.user.js
+// @homepageURL  https://github.com/marsjaninzmarsa/userscripts/
+// @supportURL   https://github.com/marsjaninzmarsa/userscripts/issues
 // @match        https://github.com/*
 // @grant        GM_log
 // @grant        GM_info
@@ -18,6 +24,9 @@
 // @require      https://openuserjs.org/src/libs/cuzi/RequestQueue.js
 // @require      https://openuserjs.org/src/libs/marsjaninzmarsa/webtoolkit.base64.min.js
 // ==/UserScript==
+// ==OpenUserJS==
+// @author marsjaninzmarsa
+// ==/OpenUserJS==
 
 (function($) {
 	var rq = new RequestQueue(10);
