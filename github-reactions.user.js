@@ -30,7 +30,7 @@
 
 (function($) {
 	var rq = new RequestQueue(10);
-	var uuid = GM_info.uuid || GM_info.script.uuid;
+	var uuid = GM_info.uuid || GM_info.script.uuid || GM_getValue('uuid') || GM_setValue('uuid', $.now()) || GM_getValue('uuid');
 
 	function process() {
 		switch(checkMatchers()) {
