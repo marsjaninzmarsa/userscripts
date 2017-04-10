@@ -406,14 +406,16 @@
 						$('meta[name=user-login]').attr('content'),
 						$('.access-token.new-token code.token').text()
 					].join(':'));
+					$('#github-reactions-save-token-button').text('✓');
 					showNotification('Token saved!');
+					showMessage('Token saved, you can close the window.');
 				}
 
 				showNotification({
 					text: 'Token generated, save it?',
 					onclick: saveToken,
 				});
-				$('<a href="#">Use token in userscript</a>')
+				$('<a href="#" id="github-reactions-save-token-button">Use token in userscript</a>')
 					.addClass([
 						'btn',
 						'btn-sm',
