@@ -23,6 +23,9 @@
 // @require      https://openuserjs.org/src/libs/Aaesos/jQuery.js
 // @require      https://openuserjs.org/src/libs/cuzi/RequestQueue.js
 // @require      https://openuserjs.org/src/libs/marsjaninzmarsa/webtoolkit.base64.min.js
+// @compatible   Firefox with GreaseMonkey (probably, not tested yet)
+// @compatible   Chrome with Tempermonkey
+// @compatible   Opera with ViolentMonkey
 // ==/UserScript==
 // ==OpenUserJS==
 // @author marsjaninzmarsa
