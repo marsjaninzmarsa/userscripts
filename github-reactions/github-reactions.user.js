@@ -247,6 +247,7 @@
 		if(typeof notification.text === 'object' && notification.text.length) {
 			notification.text = notification.text.join("\n");
 		}
+		notification.title = notification.title || GM_info.script.name;
 
 		if(typeof GM_notification === 'function') {
 			if(tags.indexOf(tag) != -1) {
