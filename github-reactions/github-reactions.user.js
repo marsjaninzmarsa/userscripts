@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Reactions on lists
 // @namespace    http://niewiarowski.it/
-// @version      0.2.0
+// @version      0.3.0
 // @author       marsjaninzmarsa
 // @description  Delivers shiny emoji reactions to issues and pull requests right to listings!
 // @copyright    2017+, Kuba Niewiarowski (niewiarowski.it)
@@ -23,7 +23,7 @@
 // @require      https://openuserjs.org/src/libs/Aaesos/jQuery.js
 // @require      https://openuserjs.org/src/libs/cuzi/RequestQueue.js
 // @require      https://openuserjs.org/src/libs/marsjaninzmarsa/webtoolkit.base64.min.js
-// @compatible   Firefox with GreaseMonkey (probably, not tested yet)
+// @compatible   Firefox with GreaseMonkey
 // @compatible   Chrome with Tempermonkey
 // @compatible   Opera with ViolentMonkey
 // ==/UserScript==

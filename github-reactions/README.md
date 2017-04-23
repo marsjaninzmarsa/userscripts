@@ -10,7 +10,7 @@ Script use GitHub API to get info about reactions to issues and pull requests ri
 * API quota extending via personal access token
 
 ## Compatibility
-* GreaseMonkey on Firefox (probably, not tested yet)
+* GreaseMonkey on Firefox
 * Tempermonkey on Chrome
 * ViolentMonkey on Opera
 
@@ -19,6 +19,10 @@ Script use GitHub API to get info about reactions to issues and pull requests ri
 * [GreasyFork](https://greasyfork.org/pl/scripts/28797-github-reactions-on-lists)
 
 ## Changelog
+
+### 0.3
+* Greasemonkey compatibility (and possible workaround for other engines)
+* Bugfixes
 
 ### 0.2
 * Indicate successful token save
