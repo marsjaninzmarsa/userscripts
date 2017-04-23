@@ -102,7 +102,7 @@
 			rq.add({
 			// GM_log({
 				method:  "GET",
-				url:     "https://api.github.com/repos" + $(issue).find('a.js-navigation-open').attr('href') + "/reactions",
+				url:     "https://api.github.com/repos" + $(issue).find('a.js-navigation-open').attr('href').replace('pull', 'issues') + "/reactions",
 				responseType: "json",
 				context: issue,
 				headers: headers,
