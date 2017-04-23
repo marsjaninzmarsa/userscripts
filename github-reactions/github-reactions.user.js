@@ -266,12 +266,11 @@
 					setTimeout(n.close.bind(n), notification.timeout || 5000);
 				}
 				n.addEventListener('click', notification.onclick);
-			}
-			Notification.requestPermission(function (permission) {
-				if (permission === "granted") {
+			} else {
+				Notification.requestPermission(function (permission) {
 					showNotification(notification, tag);
-				}
-			});
+				});
+			}
 		} else {
 			if(tags.indexOf(tag) != -1) {
 				return;
