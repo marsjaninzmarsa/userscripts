@@ -143,7 +143,7 @@
 				processQuotaExceeded(response);
 			break;
 			case 403:
-				if(response.headers['X-RateLimit-Remaining'] == 0) {
+				if(response.headers['x-ratelimit-remaining'] == 0) {
 					processQuotaExceeded(response);
 				}
 			return cached.reactions;
@@ -155,7 +155,7 @@
 						reactions[reaction.content].push(reaction.user.login);
 					});
 				}
-				putDataToCache(id, response.headers.ETag, reactions, response.headers['Last-Modified'] || null);
+				putDataToCache(id, response.headers.ETag, reactions, response.headers['last-modified'] || null);
 			return reactions;
 			default:
 				GM_log(response);
@@ -172,7 +172,7 @@
 		notification = {
 			title: "API rate limit exceeded",
 			text:  [
-				"Quota will reset "+new Date(response.headers['X-RateLimit-Reset'] * 1000).toLocaleTimeString()+".",
+				"Quota will reset "+new Date(response.headers['x-ratelimit-reset'] * 1000).toLocaleTimeString()+".",
 				"You can intercrease limit by providing personal access token."
 			],
 			prompt: "Authorize",
@@ -191,13 +191,13 @@
 			});
 			GM_setValue('token', null);
 		}
-		showNotification(notification, response.headers['X-RateLimit-Reset']);
+		showNotification(notification, response.headers['x-ratelimit-reset']);
 		showMessage(notification);
 
 		// Wait until quota reset and revert
 		setTimeout(function() {
 			processQuotaRenewed();
-		}, response.headers['X-RateLimit-Reset'] * 1000 - $.now());
+		}, response.headers['x-ratelimit-reset'] * 1000 - $.now());
 
 		// Maybe token added?
 		if(typeof GM_addValueChangeListener === 'function') {
@@ -229,10 +229,10 @@
 
 		while ( (p = headerStr.indexOf( "\r\n", (i = p + 2) + 5 )) > i )
 			(q = headerStr.indexOf( ":", i + 3 )) > i && q < p
-			&& (headers[k = headerStr.slice( i, q )] = headerStr.slice( q + 2, p ))[0] === '"'
+			&& (headers[k = headerStr.slice( i, q ).toLowerCase()] = headerStr.slice( q + 2, p ))[0] === '"'
 			&& (headers[k] = JSON.parse( headers[k] ));
 			(q = headerStr.indexOf( ":", i + 3 )) > i && q < l
-			&& (headers[k = headerStr.slice( i, q )] = headerStr.slice( q + 2 ))[0] === '"'
+			&& (headers[k = headerStr.slice( i, q ).toLowerCase()] = headerStr.slice( q + 2 ))[0] === '"'
 			&& (headers[k] = JSON.parse( headers[k] ))
 		return headers;
 	}
