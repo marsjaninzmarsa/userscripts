@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Reactions on lists
 // @namespace    http://niewiarowski.it/
-// @version      0.3.0
+// @version      0.3.1
 // @author       marsjaninzmarsa
 // @description  Delivers shiny emoji reactions to issues and pull requests right to listings!
 // @copyright    2017+, Kuba Niewiarowski (niewiarowski.it)
@@ -20,7 +20,7 @@
 // @grant        GM_addValueChangeListener
 // @grant        GM_openInTab
 // @domain       api.github.com
-// @require      https://openuserjs.org/src/libs/Aaesos/jQuery.js
+// @require      https://code.jquery.com/jquery-3.2.1.js#md5=09dd64a64ba840c31a812a3ca25eaeee,sha384=p7RDedFtQzvcp0/3247fDud39nqze/MUmahi6MOWjyr3WKWaMOyqhXuCT1sM9Q+l
 // @require      https://openuserjs.org/src/libs/cuzi/RequestQueue.js
 // @require      https://openuserjs.org/src/libs/marsjaninzmarsa/webtoolkit.base64.min.js
 // @compatible   Firefox with GreaseMonkey
@@ -450,7 +450,7 @@
 	document.addEventListener("pjax:end", function() {
 		process();
 	});
-      
+
 	process();
 
 })(jQuery);
