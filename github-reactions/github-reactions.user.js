@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Reactions on lists
 // @namespace    http://niewiarowski.it/
-// @version      0.3.1
+// @version      0.4.0
 // @author       marsjaninzmarsa
 // @description  Delivers shiny emoji reactions to issues and pull requests right to listings!
 // @copyright    2017+, Kuba Niewiarowski (niewiarowski.it)
@@ -21,6 +21,7 @@
 // @grant        GM_openInTab
 // @domain       api.github.com
 // @require      https://code.jquery.com/jquery-3.2.1.js#md5=09dd64a64ba840c31a812a3ca25eaeee,sha384=p7RDedFtQzvcp0/3247fDud39nqze/MUmahi6MOWjyr3WKWaMOyqhXuCT1sM9Q+l
+// @require      https://update.greasyfork.org/scripts/28721/1108163/mutations.js
 // @require      https://openuserjs.org/src/libs/cuzi/RequestQueue.js
 // @require      https://openuserjs.org/src/libs/marsjaninzmarsa/webtoolkit.base64.min.js
 // @compatible   Firefox with GreaseMonkey
@@ -78,7 +79,7 @@
 	}
 
 	function processIssues() {
-		$('.issues-listing .js-issue-row').each(function() {
+		$('#js-issues-toolbar ~ [role=group] .js-issue-row').each(function() {
 			processIssue(this);
 		});
 	}
@@ -107,8 +108,11 @@
 				context: issue,
 				headers: headers,
 				onload: function(response) {
+					// GM_log(headers);
+					GM_log(response);
 					response.headers = parseResponseHeaders(response.responseHeaders);
 					reactions = processResponse(response);
+					GM_log(reactions);
 					showReactions(response.context, reactions);
 				}
 			});
@@ -155,7 +159,7 @@
 						reactions[reaction.content].push(reaction.user.login);
 					});
 				}
-				putDataToCache(id, response.headers.ETag, reactions, response.headers['last-modified'] || null);
+				putDataToCache(id, response.headers.etag, reactions, response.headers['last-modified'] || null);
 			return reactions;
 			default:
 				GM_log(response);
@@ -296,7 +300,7 @@
 				text: message
 			};
 		}
-		if(typeof message.text === 'object' && message.text.length) {
+		if(typeof message?.text === 'object' && message.text.length) {
 			message.text = message.text.join("</span><br /><span>");
 		}
 
@@ -331,29 +335,33 @@
 		if($.isEmptyObject(reactions)) {
 			return;
 		}
-		var container = $(issue).find('.d-table > .reactions');
+		var container = $(issue).find('.flex-shrink-0 ~ .d-flex > .reactions');
 		if(container.length) {
 			$(container).html('');
 		} else {
-			$(issue).find('.d-table > .col-9').removeClass('col-9').addClass('col-7');
-			container = $('<div class="float-left p-2 no-wrap text-right col-2 reactions"></div>');
-			$(issue).find('.d-table > .col-2').before(container);
+			wrap = $(issue).find('.flex-shrink-0 ~ .d-flex.no-wrap').removeClass('no-wrap').addClass('flex-wrap');
+			container = $('<span class="ml-2 flex-shrink-0 flex-row pr-2 reactions" style="flex-basis: 100%;"></span>');
+			wrap.append(container);
 		}
 		var emojis    = {
 			"+1":       "👍",
 			"-1":       "👎",
 			"laugh":    "😄",
-			"confused": "😕",
-			"heart":    "❤",
 			"hooray":   "🎉",
+			"confused": "😕",
+			"heart":    "❤️",
+			"rocket":   "🚀",
+			"eyes":     "👀",
 		};
 		$.each(reactions, function(reaction, people) {
-			$('<div>'+emojis[reaction]+'</div>')
+			$('<span>'+emojis[reaction]+'</span>')
 			 	.addClass([
 			 		'float-right',
 			 		'tooltipped',
-			 		'tooltipped-se',
-			 		'tooltipped-multiline'
+			 		'tooltipped-sw',
+			 		'tooltipped-multiline',
+					'tooltipped-align-right-1',
+					'mt-1'
 			 	].join(' '))
 			 	.attr('aria-label', people.join(', ')+' reacted with '+reaction+' emoji')
 			 	.append('<span class="text-small text-bold">'+people.length+'</span>')
@@ -388,10 +396,10 @@
 						35: "Looking for porn or what??",
 						40: "No pron here.",
 						50: {
-							title:   "Ok, ok, you won. Here, tits, have fun.",
-							text:    "[click for tits][nsfw]",
+							title:   "Ok, ok, you won. Here, some pussy, have fun.",
+							text:    "[click for cat]",
 							onclick: function() {
-								GM_openInTab('http://unnamedporn.soup.io');
+								GM_openInTab('https://random.cat/');
 							},
 							timeout: 0
 						}
@@ -404,6 +412,24 @@
 			});
 
 			if($('.access-token.new-token').length) {
+				showNotification({
+					text: 'Token generated, save it?',
+					onclick: saveToken,
+				});
+				$('<a href="#" id="github-reactions-save-token-button">Use token in userscript</a>')
+					.addClass([
+						'Button',
+						'Button--small',
+						'Button--primary',
+						'BtnGroup-item'
+					].join(' '))
+					.click(function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+						saveToken();
+					})
+					.prependTo('.access-token.new-token .listgroup-item .float-right');
+
 				function saveToken() {
 					GM_setValue('token', [
 						$('meta[name=user-login]').attr('content'),
@@ -413,23 +439,6 @@
 					showNotification('Token saved!');
 					showMessage('Token saved, you can close the window.');
 				}
-
-				showNotification({
-					text: 'Token generated, save it?',
-					onclick: saveToken,
-				});
-				$('<a href="#" id="github-reactions-save-token-button">Use token in userscript</a>')
-					.addClass([
-						'btn',
-						'btn-sm',
-						'BtnGroup-item'
-					].join(' '))
-					.click(function(e) {
-						e.preventDefault();
-						e.stopPropagation();
-						saveToken();
-					})
-					.prependTo('.access-token.new-token .BtnGroup');
 			}
 		}
 	}
@@ -447,9 +456,7 @@
 
 	// GM_log(GM_info);
 
-	document.addEventListener("pjax:end", function() {
-		process();
-	});
+	document.addEventListener("ghmo:container", process);
 
 	process();
 
