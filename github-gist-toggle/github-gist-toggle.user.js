@@ -6,26 +6,27 @@
 // @icon        https://github.com/favicon.ico
 // @encoding    utf-8
 // @include     /^https?:\/\/gist.github.com\/[\w-]+\/.*/
-// @require     http://code.jquery.com/jquery-2.1.3.min.js
-// @version     1.0
+// @require     https://code.jquery.com/jquery-2.1.3.min.js
+// @require     https://update.greasyfork.org/scripts/28721/1108163/mutations.js
+// @version     1.1
 // ==/UserScript==
 
 jQuery(function($) {
 	function addBtn(){
 		$('.file-box').each(function() {
 			$('<a>', {
-				class: 'btn btn-sm git-toggle-file',
+				class: 'Button--secondary Button--small Button git-toggle-file',
 				href:  '#',
 				text:  'Toggle'
 			}).click((e) => {
 				e.preventDefault();
 				$wrapper = $(e.target).parents('.file').find('.blob-wrapper, .blob').first();
 				$wrapper.prop('hidden', !$wrapper.prop('hidden'));
-			}).appendTo($(this).find('.file-actions .btn').parent());
+			}).appendTo($(this).find('.file-actions .Button').parent());
 		});
 	}
 
-	$().on("pjax:end", addBtn);
+	document.addEventListener("ghmo:container", addBtn);
 
 	addBtn();
 
