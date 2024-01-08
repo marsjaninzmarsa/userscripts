@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         GitHub Reactions on lists
 // @namespace    http://niewiarowski.it/
-// @version      0.4.0
+// @version      0.4.1
 // @author       marsjaninzmarsa
 // @description  Delivers shiny emoji reactions to issues and pull requests right to listings!
 // @copyright    2017+, Kuba Niewiarowski (niewiarowski.it)
-// @license      GPL3+, https://github.com/marsjaninzmarsa/userscripts/blob/master/LICENSE
+// @license      CC-BY-SA-3.0; http://creativecommons.org/licenses/by-sa/3.0/
+// @license      MIT
 // @updateURL    https://openuserjs.org/meta/marsjaninzmarsa/GitHub_Reactions_on_lists.meta.js
 // @downloadURL  https://openuserjs.org/src/scripts/marsjaninzmarsa/GitHub_Reactions_on_lists.user.js
 // @homepageURL  https://github.com/marsjaninzmarsa/userscripts/
@@ -35,6 +36,7 @@
 (function($) {
 	var rq = new RequestQueue(10);
 	var uuid = GM_info.uuid || GM_info.script.uuid || GM_getValue('uuid') || GM_setValue('uuid', $.now()) || GM_getValue('uuid');
+	var username = $('meta[name=user-login]').attr('content');
 
 	function process() {
 		switch(checkMatchers()) {
@@ -108,11 +110,8 @@
 				context: issue,
 				headers: headers,
 				onload: function(response) {
-					// GM_log(headers);
-					GM_log(response);
 					response.headers = parseResponseHeaders(response.responseHeaders);
 					reactions = processResponse(response);
-					GM_log(reactions);
 					showReactions(response.context, reactions);
 				}
 			});
@@ -139,7 +138,6 @@
 		id = $(response.context).data('id');
 		cached = getDataFromCache(id);
 
-		// GM_log(response);
 		switch(response.status) {
 			case 304:
 			return cached.reactions;
@@ -340,7 +338,7 @@
 			$(container).html('');
 		} else {
 			wrap = $(issue).find('.flex-shrink-0 ~ .d-flex.no-wrap').removeClass('no-wrap').addClass('flex-wrap');
-			container = $('<span class="ml-2 flex-shrink-0 flex-row pr-2 reactions" style="flex-basis: 100%;"></span>');
+			container = $('<span class="ml-2 flex-shrink-0 d-flex flex-row flex-justify-end pr-2 reactions" style="flex-basis: 100%;"></span>');
 			wrap.append(container);
 		}
 		var emojis    = {
@@ -354,18 +352,24 @@
 			"eyes":     "👀",
 		};
 		$.each(reactions, function(reaction, people) {
-			$('<span>'+emojis[reaction]+'</span>')
+			const $reaction = $('<span>'+emojis[reaction]+'</span>')
 			 	.addClass([
-			 		'float-right',
 			 		'tooltipped',
 			 		'tooltipped-sw',
 			 		'tooltipped-multiline',
 					'tooltipped-align-right-1',
-					'mt-1'
+					'mt-1',
+					'social-reaction-summary-item',
+					// 'btn-link',
+					// 'no-underline',
+
 			 	].join(' '))
 			 	.attr('aria-label', people.join(', ')+' reacted with '+reaction+' emoji')
-			 	.append('<span class="text-small text-bold">'+people.length+'</span>')
-			 	.appendTo(container);
+			 	.append('<span class="text-small text-bold">'+people.length+'</span>');
+			if(people.includes(username)) {
+				$reaction.addClass('user-has-reacted');
+			}
+			$reaction.appendTo(container);
 		});
 	}
 
@@ -432,7 +436,7 @@
 
 				function saveToken() {
 					GM_setValue('token', [
-						$('meta[name=user-login]').attr('content'),
+						username,
 						$('.access-token.new-token code.token').text()
 					].join(':'));
 					$('#github-reactions-save-token-button').text('✓');

@@ -20,6 +20,10 @@ Script use GitHub API to get info about reactions to issues and pull requests ri
 
 ## Changelog
 
+### 0.4
+* Updated to new GitHub design
+* Bugfixes
+
 ### 0.3
 * Greasemonkey compatibility (and possible workaround for other engines)
 * Bugfixes
